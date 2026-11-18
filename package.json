@@ -1,0 +1,13 @@
+﻿{
+    "private":  true,
+    "workspaces":  [
+                       "apps/*",
+                       "packages/*"
+                   ],
+    "name":  "gize-tech",
+    "version":  "0.1.0",
+    "scripts":  {
+                    "dev:api":  "npm run start:dev --workspace=apps/api",
+                    "build:api":  "npm run build --workspace=apps/api"
+                }
+}

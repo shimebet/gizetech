@@ -1,0 +1,269 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@angular-devkit/core": {
+      "name": "@angular-devkit/core",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "picomatch"
+      ],
+      "effects": [
+        "@angular-devkit/schematics",
+        "@angular-devkit/schematics-cli",
+        "@nestjs/cli",
+        "@nestjs/schematics"
+      ],
+      "range": ">=16.2.1",
+      "nodes": [
+        "node_modules/@angular-devkit/core"
+      ],
+      "fixAvailable": {
+        "name": "@nestjs/schematics",
+        "version": "10.0.2",
+        "isSemVerMajor": true
+      }
+    },
+    "@angular-devkit/schematics": {
+      "name": "@angular-devkit/schematics",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@angular-devkit/core"
+      ],
+      "effects": [
+        "@angular-devkit/schematics-cli",
+        "@nestjs/cli",
+        "@nestjs/schematics"
+      ],
+      "range": ">=16.2.1",
+      "nodes": [
+        "node_modules/@angular-devkit/schematics"
+      ],
+      "fixAvailable": {
+        "name": "@nestjs/schematics",
+        "version": "10.0.2",
+        "isSemVerMajor": true
+      }
+    },
+    "@angular-devkit/schematics-cli": {
+      "name": "@angular-devkit/schematics-cli",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@angular-devkit/core",
+        "@angular-devkit/schematics"
+      ],
+      "effects": [
+        "@nestjs/cli"
+      ],
+      "range": ">=16.2.1",
+      "nodes": [
+        "node_modules/@angular-devkit/schematics-cli"
+      ],
+      "fixAvailable": {
+        "name": "@nestjs/cli",
+        "version": "10.1.17",
+        "isSemVerMajor": true
+      }
+    },
+    "@nestjs/cli": {
+      "name": "@nestjs/cli",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@angular-devkit/core",
+        "@angular-devkit/schematics",
+        "@angular-devkit/schematics-cli",
+        "@nestjs/schematics"
+      ],
+      "effects": [],
+      "range": ">=10.1.18",
+      "nodes": [
+        "node_modules/@nestjs/cli"
+      ],
+      "fixAvailable": {
+        "name": "@nestjs/cli",
+        "version": "10.1.17",
+        "isSemVerMajor": true
+      }
+    },
+    "@nestjs/schematics": {
+      "name": "@nestjs/schematics",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@angular-devkit/core",
+        "@angular-devkit/schematics"
+      ],
+      "effects": [
+        "@nestjs/cli"
+      ],
+      "range": ">=10.0.3",
+      "nodes": [
+        "node_modules/@nestjs/schematics"
+      ],
+      "fixAvailable": {
+        "name": "@nestjs/schematics",
+        "version": "10.0.2",
+        "isSemVerMajor": true
+      }
+    },
+    "@vitest/coverage-v8": {
+      "name": "@vitest/coverage-v8",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "vitest"
+      ],
+      "effects": [
+        "vitest"
+      ],
+      "range": ">=3.2.0-beta.1",
+      "nodes": [
+        "node_modules/@vitest/coverage-v8"
+      ],
+      "fixAvailable": {
+        "name": "@vitest/coverage-v8",
+        "version": "3.1.4",
+        "isSemVerMajor": true
+      }
+    },
+    "fdir": {
+      "name": "fdir",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "picomatch"
+      ],
+      "effects": [
+        "tinyglobby"
+      ],
+      "range": ">=5.2.1",
+      "nodes": [
+        "node_modules/fdir"
+      ],
+      "fixAvailable": {
+        "name": "vitest",
+        "version": "3.1.4",
+        "isSemVerMajor": true
+      }
+    },
+    "picomatch": {
+      "name": "picomatch",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1247710,
+          "name": "picomatch",
+          "dependency": "picomatch",
+          "title": "picomatch vulnerable to ReDoS through single-branch repeated extglobs",
+          "url": "https://github.com/advisories/GHSA-fc5q-39xc-vjpf",
+          "severity": "high",
+          "cwe": [
+            "CWE-1333"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<=4.0.7"
+        }
+      ],
+      "effects": [
+        "@angular-devkit/core",
+        "fdir",
+        "tinyglobby",
+        "vite",
+        "vitest"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/picomatch"
+      ],
+      "fixAvailable": {
+        "name": "vitest",
+        "version": "3.1.4",
+        "isSemVerMajor": true
+      }
+    },
+    "tinyglobby": {
+      "name": "tinyglobby",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "fdir",
+        "picomatch"
+      ],
+      "effects": [
+        "vite",
+        "vitest"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/tinyglobby"
+      ],
+      "fixAvailable": {
+        "name": "vitest",
+        "version": "3.1.4",
+        "isSemVerMajor": true
+      }
+    },
+    "vite": {
+      "name": "vite",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "picomatch",
+        "tinyglobby"
+      ],
+      "effects": [],
+      "range": ">=6.3.0-beta.0",
+      "nodes": [
+        "node_modules/vite"
+      ],
+      "fixAvailable": true
+    },
+    "vitest": {
+      "name": "vitest",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@vitest/coverage-v8",
+        "picomatch",
+        "tinyglobby"
+      ],
+      "effects": [
+        "@vitest/coverage-v8"
+      ],
+      "range": ">=3.1.2",
+      "nodes": [
+        "node_modules/vitest"
+      ],
+      "fixAvailable": {
+        "name": "vitest",
+        "version": "3.1.4",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 11,
+      "critical": 0,
+      "total": 11
+    },
+    "dependencies": {
+      "prod": 244,
+      "dev": 223,
+      "optional": 53,
+      "peer": 3,
+      "peerOptional": 0,
+      "total": 469
+    }
+  }
+}

@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum ArticleStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+model User {
+  id           String     @id @default(uuid()) @db.VarChar(36)
+  email        String     @unique @db.VarChar(191)
+  username     String     @unique @db.VarChar(100)
+  passwordHash String     @db.VarChar(255)
+  firstName    String?    @db.VarChar(100)
+  lastName     String?    @db.VarChar(100)
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  roles     UserRole[]
+  sessions  AuthSession[]
+  articles  NewsArticle[]
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  name        String   @unique @db.VarChar(100)
+  description String?  @db.VarChar(255)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       UserRole[]
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String  @id @default(uuid()) @db.VarChar(36)
+  code        String  @unique @db.VarChar(150)
+  description String? @db.VarChar(255)
+
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+model UserRole {
+  userId String @db.VarChar(36)
+  roleId String @db.VarChar(36)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model RolePermission {
+  roleId       String @db.VarChar(36)
+  permissionId String @db.VarChar(36)
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model AuthSession {
+  id               String    @id @default(uuid()) @db.VarChar(36)
+  userId           String    @db.VarChar(36)
+  refreshTokenHash String    @db.VarChar(255)
+  expiresAt        DateTime
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("auth_sessions")
+}
+
+model NewsCategory {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  name        String   @unique @db.VarChar(150)
+  slug        String   @unique @db.VarChar(191)
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  articles NewsArticle[]
+
+  @@map("news_categories")
+}
+
+model NewsArticle {
+  id          String        @id @default(uuid()) @db.VarChar(36)
+  title       String        @db.VarChar(255)
+  slug        String        @unique @db.VarChar(191)
+  summary     String?       @db.Text
+  content     String        @db.LongText
+  imageUrl    String?       @db.VarChar(2048)
+  status      ArticleStatus @default(DRAFT)
+  authorId    String        @db.VarChar(36)
+  categoryId  String        @db.VarChar(36)
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  author   User         @relation(fields: [authorId], references: [id])
+  category NewsCategory @relation(fields: [categoryId], references: [id])
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+  @@index([authorId])
+  @@map("news_articles")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.VarChar(36)
+  userId     String?  @db.VarChar(36)
+  action     String   @db.VarChar(150)
+  entityType String   @db.VarChar(100)
+  entityId   String?  @db.VarChar(36)
+  details    Json?
+  ipAddress  String?  @db.VarChar(45)
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
