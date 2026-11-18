@@ -9,12 +9,14 @@ import * as argon2 from 'argon2';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
+import { AuthSessionService } from './auth-session.service.js';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
+    private readonly sessions: AuthSessionService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -128,10 +130,14 @@ export class AuthService {
       },
     );
 
+    const session = await this.sessions.createSession(user.id);
+
     return {
       tokenType: 'Bearer',
       accessToken,
       expiresIn: 900,
+      refreshToken: session.refreshToken,
+      refreshExpiresIn: session.refreshExpiresIn,
       user: {
         id: user.id,
         email: user.email,
@@ -141,5 +147,41 @@ export class AuthService {
         status: user.status,
       },
     };
+  }
+
+  async refresh(refreshToken: string) {
+    const rotated = await this.sessions.rotateSession(refreshToken);
+
+    const secret = process.env.JWT_ACCESS_SECRET;
+
+    if (!secret) {
+      throw new InternalServerErrorException(
+        'Authentication configuration unavailable',
+      );
+    }
+
+    const accessToken = await this.jwt.signAsync(
+      {
+        sub: rotated.user.id,
+        username: rotated.user.username,
+      },
+      {
+        secret,
+        algorithm: 'HS256',
+        expiresIn: 900,
+      },
+    );
+
+    return {
+      tokenType: 'Bearer',
+      accessToken,
+      expiresIn: 900,
+      refreshToken: rotated.refreshToken,
+      refreshExpiresIn: rotated.refreshExpiresIn,
+    };
+  }
+
+  async logout(refreshToken: string) {
+    return this.sessions.revokeSession(refreshToken);
   }
 }

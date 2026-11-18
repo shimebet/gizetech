@@ -35,3 +35,4 @@ coverage/
 *.before-encoding-fix
 
 apps/api/src/generated/prisma/
+*.bak.*

@@ -15,7 +15,7 @@
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main.js",
         "lint": "oxlint src/ test/",
-        "test": "tsc -p tsconfig.test.json && node --test dist-test/app.controller.spec.js",
+        "test": "tsc -p tsconfig.test.json && node --test dist-test/app.controller.spec.js dist-test/auth/auth-session.service.spec.js dist-test/auth/utils/refresh-token.util.spec.js",
         "test:watch": "vitest",
         "test:cov": "vitest run --coverage",
         "test:debug": "vitest --inspect-brk --no-file-parallelism",
